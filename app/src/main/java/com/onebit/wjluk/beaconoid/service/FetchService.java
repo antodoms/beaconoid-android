@@ -18,7 +18,7 @@ import java.net.URL;
 public class FetchService extends IntentService {
     private static final String TAG = FetchService.class.getSimpleName();
     public FetchService(){
-        super("FetchService");
+        super("FetchService"); //coment
     }
 
     @Override
