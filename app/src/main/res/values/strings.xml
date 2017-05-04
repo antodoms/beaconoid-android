@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Beaconoid</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="sign_in_prompt">Beaconoid</string>
+    <string name="loading">loding</string>
+    <string name="sign_in_button">sign in with google</string>
+    <string name="title_activity_dash">Dashboard</string>
+    <string name="title_activity_detail">DetailActivity</string>
+</resources>
