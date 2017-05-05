@@ -44,10 +44,6 @@ public class MainActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-//        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-//        signInButton.setSize(SignInButton.SIZE_WIDE);
-//        signInButton.setColorScheme(SignInButton.COLOR_AUTO);
-//        signInButton.setOnClickListener(this);
         Button signin = (Button) findViewById(R.id.sign_in_button);
         signin.setOnClickListener(this);
     }

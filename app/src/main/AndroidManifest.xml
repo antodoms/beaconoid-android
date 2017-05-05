@@ -3,6 +3,7 @@
     package="com.onebit.wjluk.beaconoid">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +38,15 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".service.ClickService"
+            android:exported="false" />
+
+        <activity
+            android:name=".Dash2Activity"
+            android:label="@string/title_activity_dash2"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
