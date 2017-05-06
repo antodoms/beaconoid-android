@@ -12,13 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyASnswBFiJo24A2VZCpn9cc6Ow5nB-T030" />
 
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +27,7 @@
         <activity
             android:name=".DashActivity"
             android:label="@string/title_activity_dash"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
@@ -47,7 +46,8 @@
         <activity
             android:name=".Dash2Activity"
             android:label="@string/title_activity_dash2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

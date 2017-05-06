@@ -1,8 +1,13 @@
 package com.onebit.wjluk.beaconoid;
 
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +18,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
 public class Dash2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +43,20 @@ public class Dash2Activity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment adFragment = new AdFragment();
+        fragmentTransaction.add(R.id.dash_container,adFragment);
+        fragmentTransaction.commit();
+
+
+
     }
 
     @Override
@@ -48,7 +65,29 @@ public class Dash2Activity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Exit Application?");
+            alertDialogBuilder
+                    .setMessage("Click yes to exit!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    moveTaskToBack(true);
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(1);
+                                }
+                            })
+
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 
@@ -80,17 +119,16 @@ public class Dash2Activity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        if (id == R.id.nav_stream) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            AdFragment adFragment = new AdFragment();
+            fragmentTransaction.replace(R.id.dash_container,adFragment);
+            fragmentTransaction.commit();
+        } else if (id == R.id.nav_fav) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            FavFragment favFragment = new FavFragment();
+            fragmentTransaction.replace(R.id.dash_container,favFragment);
+            fragmentTransaction.commit();
 
         }
 

@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
+
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity
             // Signed in successfully.
             GoogleSignInAccount acct = result.getSignInAccount();
             String email = acct.getEmail();
-            Intent intent = new Intent(this,DashActivity.class);
+            Intent intent = new Intent(this,Dash2Activity.class);
             intent.putExtra("email",email);
             startActivity(intent);
         }

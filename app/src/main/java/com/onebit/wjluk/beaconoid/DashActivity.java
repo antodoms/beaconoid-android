@@ -73,7 +73,7 @@ public class DashActivity extends AppCompatActivity implements BeaconConsumer, R
 
         adsList = (ListView) findViewById(R.id.adList);
         adAdapter = new AdAdapter(this, new ArrayList<Ad>());
-        adsList.setAdapter(adAdapter);
+        //adsList.setAdapter(adAdapter);
         adsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -180,8 +180,8 @@ public class DashActivity extends AppCompatActivity implements BeaconConsumer, R
             Toast.makeText(getApplicationContext(), "received string length " + name.length(), Toast.LENGTH_SHORT).show();
             ArrayList<Ad> newList = JsonConverter.convert(name);
             AdManager.getInstance().setAds(newList);
-            adAdapter.clear();
-            adAdapter.addAll(newList);
+            //adAdapter.clear();
+            //adAdapter.addAll(newList);
 
         }
     };

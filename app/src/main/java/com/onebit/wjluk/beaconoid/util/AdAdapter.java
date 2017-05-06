@@ -5,6 +5,8 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,22 +22,47 @@ import java.util.ArrayList;
  * Created by jason on 4/05/17.
  */
 
-public class AdAdapter extends ArrayAdapter<Ad> {
-    Context mContext;
+public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder> {
+    private Context mContext;
+    private static final String TAG = AdAdapter.class.getSimpleName();
+    private ArrayList<Ad> ads;
     public AdAdapter(@NonNull Context context, ArrayList<Ad> objs) {
-        super(context, 0,objs);
         mContext = context;
+        ads = objs;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if(convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.ad_item, parent, false);
-        }
-        TextView tv = (TextView) convertView.findViewById(R.id.tv_ad_item);
-        String dis = getItem(position).getName();
-        tv.setText(dis);
-        return convertView;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.ad_item,parent,false);
+        return new ViewHolder(itemView);
+
     }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.tmp.setText(ads.get(position).getName());
+    }
+
+    @Override
+    public int getItemCount() {
+        return ads.size();
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
+        public TextView tmp;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            tmp = (TextView) itemView.findViewById(R.id.tv_ad_item);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d(TAG, "onClick " + getItemId() + " ");
+        }
+    }
+
 }
