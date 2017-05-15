@@ -60,9 +60,13 @@ public class AdFragment extends Fragment {
         adAdapter = new AdAdapter(getActivity(),adslist);
         adList.setLayoutManager(adLayoutManager);
         adList.setAdapter(adAdapter);
-        FetchTask fetchTask=new FetchTask();
-        fetchTask.execute("czlukuan@gmail.com","UR_0020");
         return v;
+    }
+
+
+    public void fetch(String email){
+        FetchTask fetchTask=new FetchTask();
+        fetchTask.execute(email,"22-868-7305");
     }
 
     public class FetchTask extends AsyncTask<String,Void,Void> {
@@ -130,9 +134,6 @@ public class AdFragment extends Fragment {
                 }
             }
             AdManager.getInstance().setAds(JsonConverter.convert(jsonString));
-            adslist.addAll(AdManager.getInstance().getAds());
-            adslist.addAll(AdManager.getInstance().getAds());
-            adslist.addAll(AdManager.getInstance().getAds());
             adslist.addAll(AdManager.getInstance().getAds());
             Log.d(TAG, adslist.size()+"");
             return null;

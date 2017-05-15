@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class AdManager {
     private ArrayList<Ad> ads;
     private static AdManager mInstance = null;
+    private String email;
 
     public static AdManager getInstance(){
         if(mInstance == null)
@@ -21,6 +22,7 @@ public class AdManager {
     }
     private AdManager(){
         ads = new ArrayList<>();
+        email = "";
     }
 
     public void setAds(ArrayList<Ad> ads) {
@@ -30,5 +32,13 @@ public class AdManager {
 
     public ArrayList<Ad> getAds() {
         return ads;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

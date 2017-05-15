@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,6 +22,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.onebit.wjluk.beaconoid.util.AdManager;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ImageView imageView =(ImageView) findViewById(R.id.imageViewUser) ;
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_person));
 
         //add sign in with google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -111,6 +115,7 @@ public class MainActivity extends AppCompatActivity
             // Signed in successfully.
             GoogleSignInAccount acct = result.getSignInAccount();
             String email = acct.getEmail();
+            AdManager.getInstance().setEmail(email);
             Intent intent = new Intent(this,Dash2Activity.class);
             intent.putExtra("email",email);
             startActivity(intent);
