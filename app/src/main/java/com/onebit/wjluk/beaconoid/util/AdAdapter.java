@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder> {
                 }
             }
         });
+        holder.item.setImageResource(R.drawable.placeholder);
     }
 
     @Override
@@ -70,11 +72,13 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener{
         private TextView tmp;
+        private ImageView item;
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tmp = (TextView) itemView.findViewById(R.id.tv_ad_item);
+            item = (ImageView) itemView.findViewById(R.id.img_item);
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

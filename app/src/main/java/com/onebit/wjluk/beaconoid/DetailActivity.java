@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.onebit.wjluk.beaconoid.model.Ad;
@@ -21,6 +22,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private Context mContext;
     private Ad ad;
+    ImageView detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,9 @@ public class DetailActivity extends AppCompatActivity {
 
         TextView tmp = (TextView) findViewById(R.id.tv_tmp);
         tmp.setText(ad.getName()+" "+ad.getDescription()+" "+ad.getPrice());
+
+        detail = (ImageView) findViewById(R.id.img_detail);
+        detail.setImageResource(R.drawable.placeholder);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
