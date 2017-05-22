@@ -12,6 +12,7 @@ public class AdManager {
     private ArrayList<Ad> ads;
     private static AdManager mInstance = null;
     private String email;
+    private double distance =-1;
 
     public static AdManager getInstance(){
         if(mInstance == null)
@@ -25,9 +26,9 @@ public class AdManager {
         email = "";
     }
 
-    public void setAds(ArrayList<Ad> ads) {
-        this.ads = null;
-        this.ads = ads;
+    public void setAds(ArrayList<Ad> adl) {
+        ads = null;
+        ads = adl;
     }
 
     public ArrayList<Ad> getAds() {
@@ -40,5 +41,13 @@ public class AdManager {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setDistance(double dis) {
+        distance = dis;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 }

@@ -64,9 +64,10 @@ public class AdFragment extends Fragment {
     }
 
 
-    public void fetch(String email){
+    public void fetch(String email, String bID){
         FetchTask fetchTask=new FetchTask();
-        fetchTask.execute(email,"22-868-7305");
+        fetchTask.execute(email,bID);
+        //Schaefer Port
     }
 
     public class FetchTask extends AsyncTask<String,Void,Void> {
@@ -133,8 +134,9 @@ public class AdFragment extends Fragment {
                     }
                 }
             }
-            AdManager.getInstance().setAds(JsonConverter.convert(jsonString));
-            adslist.addAll(AdManager.getInstance().getAds());
+            adslist.addAll(JsonConverter.convert(jsonString));
+            AdManager.getInstance().setAds(adslist);
+
             Log.d(TAG, adslist.size()+"");
             return null;
         }

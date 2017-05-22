@@ -4,10 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +15,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.onebit.wjluk.beaconoid.util.AdManager;
 
+//main entrance for the app. sign in the user
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener
         ,View.OnClickListener{
@@ -40,6 +37,7 @@ public class MainActivity extends AppCompatActivity
         imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_person));
 
         //add sign in with google
+        //code from google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -112,7 +110,11 @@ public class MainActivity extends AppCompatActivity
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully.
+            /* Signed in successfully.
+            signed in, go to dash2activity
+            and also save the email to the AdManager
+            @TODO add imei, waiting for serverside implementation.
+            */
             GoogleSignInAccount acct = result.getSignInAccount();
             String email = acct.getEmail();
             AdManager.getInstance().setEmail(email);

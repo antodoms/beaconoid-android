@@ -3,6 +3,7 @@ package com.onebit.wjluk.beaconoid;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -58,10 +59,22 @@ public class DetailActivity extends AppCompatActivity {
                 values.put(SqlHelper.COLUMN_CID,ad.getcId());
                 values.put(SqlHelper.COLUMN_PRICE,ad.getPrice());
                 values.put(SqlHelper.COLUMN_DES,ad.getDescription());
-                db.insert(SqlHelper.TABLE_ADS,null,values);
-
-                Snackbar.make(view, R.string.action_save, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Cursor c = db.query(SqlHelper.TABLE_ADS,
+                        null,
+                        SqlHelper.COLUMN_AD_ID+"= ?",
+                        new String[]{ad.getId()+""},
+                        null,
+                        null,
+                        null
+                        );
+                if(c == null || !c.moveToFirst()) {
+                    db.insert(SqlHelper.TABLE_ADS,null,values);
+                    Snackbar.make(view, R.string.action_save, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    Snackbar.make(view, R.string.action_already_saved, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
     }

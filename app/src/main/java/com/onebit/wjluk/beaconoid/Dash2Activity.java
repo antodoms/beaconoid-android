@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -44,7 +45,9 @@ public class Dash2Activity extends AppCompatActivity
     private Identifier nSpace = null;
     private Identifier ins = null;
     private static final int PERMISSION_LOCATION = 1001;
-
+    public static final String TAG = Dash2Activity.class.getSimpleName();
+    private String bID;
+    private double distance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,8 +157,8 @@ public class Dash2Activity extends AppCompatActivity
             AdFragment adFragment = new AdFragment();
             fragmentTransaction.replace(R.id.dash_container,adFragment);
             fragmentTransaction.commit();
-            if(nSpace != null && ins !=null){
-                adFragment.fetch(AdManager.getInstance().getEmail());
+            if(nSpace != null && ins !=null && bID != null){
+                adFragment.fetch(AdManager.getInstance().getEmail(),bID );
             }
         } else if (id == R.id.nav_fav) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -227,13 +230,18 @@ public class Dash2Activity extends AppCompatActivity
                 // This is a Eddystone-UID frame
                 Identifier namespaceId = beacon.getId1();
                 Identifier instanceId = beacon.getId2();
+
+
                 if(nSpace == null || ins == null){
                     nSpace = namespaceId;
                     ins = instanceId;
+                    bID = nSpace.toString()+ins.toString();
+                    AdManager.getInstance().setDistance(beacon.getDistance());
                     fetch();
                 } else if (nSpace.compareTo(namespaceId) != 0 || ins.compareTo(instanceId)!=0){
                     nSpace = namespaceId;
                     ins = instanceId;
+                    bID = nSpace.toString()+ins.toString();
                     fetch();
                 }
 
@@ -246,7 +254,7 @@ public class Dash2Activity extends AppCompatActivity
         Fragment f = fragmentManager.findFragmentById(R.id.dash_container);
         if(f != null && f instanceof AdFragment){
             AdFragment adFragment = (AdFragment) f;
-            adFragment.fetch(AdManager.getInstance().getEmail());
+            adFragment.fetch(AdManager.getInstance().getEmail(),bID);
         }
     }
 

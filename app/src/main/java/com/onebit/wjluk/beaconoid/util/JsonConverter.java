@@ -34,6 +34,7 @@ public class JsonConverter {
                     Ad adv = new Ad(id,name,bID,cID,price,des);
                     ads.add(adv);
                 }
+                int i=0;
                 return ads;
             } catch (JSONException e){
                 Log.d(TAG,"invaild json!");
