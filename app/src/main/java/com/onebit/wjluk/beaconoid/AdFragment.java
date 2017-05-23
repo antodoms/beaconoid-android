@@ -50,9 +50,18 @@ public class AdFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(adslist == null) {
+            adslist = new ArrayList<>();
+            adslist.addAll(AdManager.getInstance().getAds());
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        adslist = new ArrayList<>();
+        adslist = AdManager.getInstance().getAds();
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ad, container, false);
         adList = (RecyclerView) v.findViewById(R.id.frag_ad_list);
@@ -64,88 +73,13 @@ public class AdFragment extends Fragment {
     }
 
 
-    public void fetch(String email, String bID){
-        FetchTask fetchTask=new FetchTask();
-        fetchTask.execute(email,bID);
-        //Schaefer Port
+    public void setAd(){
+        adslist.clear();
+        adslist.addAll(AdManager.getInstance().getAds());
+        Log.d(TAG,"about to change dataset");
+        adAdapter.notifyDataSetChanged();
     }
 
-    public class FetchTask extends AsyncTask<String,Void,Void> {
-        @Override
-        protected Void doInBackground(String... params) {
-            String bID = params[1];
-            String email = params[0];
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-            String jsonString = null;
-            try {
-                final String AD_BASE_URL = "https://api.beaconoid.me";
-                Uri builtUri = Uri.parse(AD_BASE_URL).buildUpon()
-                        .appendPath("api")
-                        .appendPath("v1")
-                        .appendPath("advertisements")
-                        .appendQueryParameter("email", email)
-                        .appendQueryParameter("beacon_id", bID)
-                        .build();
-                URL url = new URL(builtUri.toString());
-
-                // Create the request to OpenWeatherMap, and open the connection
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("POST");
-                urlConnection.connect();
-
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
-                    // Nothing to do.
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
-                    buffer.append(line + "\n");
-                }
-                if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
-                    return null;
-                }
-                jsonString = buffer.toString();
-
-            } catch (MalformedURLException e) {
-                Log.e(TAG,"MalformedURLException");
-
-            } catch (IOException e) {
-                Log.e(TAG,"IOException");
-
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (final IOException e) {
-                        Log.e(TAG,"IOException");
-
-                    }
-                }
-            }
-            adslist.addAll(JsonConverter.convert(jsonString));
-            AdManager.getInstance().setAds(adslist);
-
-            Log.d(TAG, adslist.size()+"");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void ads) {
-            adAdapter.notifyDataSetChanged();
-        }
-    }
 
 
 }

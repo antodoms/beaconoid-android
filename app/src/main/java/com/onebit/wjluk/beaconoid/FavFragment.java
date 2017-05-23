@@ -46,14 +46,21 @@ public class FavFragment extends Fragment {
                 null,
                 null);
         while(cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_AD_ID));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_AD_NAME));
-            int bid = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_BID));
-            int cid = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_CID));
-            double price = cursor.getDouble(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_PRICE));
-            String des = cursor.getString(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_DES));
-            Ad ad = new Ad(id,name,bid,cid,price,des);
-            adslist.add(ad);
+            long exp = cursor.getLong(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_EXP));
+            if(System.currentTimeMillis() <= exp){
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_AD_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_AD_NAME));
+                int bid = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_BID));
+                int cid = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_CID));
+                double price = cursor.getDouble(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_PRICE));
+                String des = cursor.getString(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_DES));
+                String url = cursor.getString(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_URL));
+                Ad ad = new Ad(id,name,bid,cid,price,des,url,exp);
+                adslist.add(ad);
+            } else {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_AD_ID));
+                db.delete(SqlHelper.TABLE_ADS,SqlHelper.COLUMN_AD_ID+" =? ",new String[]{id+""});
+            }
         }
         GridLayoutManager favLayoutManager = new GridLayoutManager(getActivity(), 1);
         AdAdapter adAdapter = new AdAdapter(getActivity(), adslist);

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.onebit.wjluk.beaconoid.DetailActivity;
 import com.onebit.wjluk.beaconoid.R;
 import com.onebit.wjluk.beaconoid.model.Ad;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -60,7 +61,11 @@ public class AdAdapter extends RecyclerView.Adapter<AdAdapter.ViewHolder> {
                 }
             }
         });
-        holder.item.setImageResource(R.drawable.placeholder);
+        Context context =
+                holder.item.getContext();
+        Picasso.with(context).load(ads.get(position).getUrl())
+                .placeholder(R.drawable.placeholder)
+                .into(holder.item);
     }
 
     @Override

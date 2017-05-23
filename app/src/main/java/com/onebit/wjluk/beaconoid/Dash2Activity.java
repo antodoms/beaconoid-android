@@ -3,6 +3,8 @@ package com.onebit.wjluk.beaconoid;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
@@ -24,7 +26,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.onebit.wjluk.beaconoid.model.Ad;
 import com.onebit.wjluk.beaconoid.util.AdManager;
+import com.onebit.wjluk.beaconoid.util.JsonConverter;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -34,6 +38,14 @@ import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -48,6 +60,8 @@ public class Dash2Activity extends AppCompatActivity
     public static final String TAG = Dash2Activity.class.getSimpleName();
     private String bID;
     private double distance;
+    protected ArrayList<Ad> adslist;
+    private Fragment adFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +77,14 @@ public class Dash2Activity extends AppCompatActivity
 
             }
         }
+        adslist = new ArrayList<>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FetchTask task = new FetchTask();
+                task.execute(AdManager.getInstance().getEmail(),"UR_0020");
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -84,7 +101,7 @@ public class Dash2Activity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment adFragment = new AdFragment();
+        adFragment = new AdFragment();
         fragmentTransaction.add(R.id.dash_container,adFragment);
         fragmentTransaction.commit();
 
@@ -154,12 +171,11 @@ public class Dash2Activity extends AppCompatActivity
 
         if (id == R.id.nav_stream) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            AdFragment adFragment = new AdFragment();
+           if(adFragment == null) {
+               adFragment = new AdFragment();
+           }
             fragmentTransaction.replace(R.id.dash_container,adFragment);
             fragmentTransaction.commit();
-            if(nSpace != null && ins !=null && bID != null){
-                adFragment.fetch(AdManager.getInstance().getEmail(),bID );
-            }
         } else if (id == R.id.nav_fav) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             FavFragment favFragment = new FavFragment();
@@ -251,10 +267,98 @@ public class Dash2Activity extends AppCompatActivity
     }
 
     private void fetch() {
+        FetchTask task = new FetchTask();
+        task.execute(AdManager.getInstance().getEmail(),bID);
+    }
+
+    public void setAdFrag() {
         Fragment f = fragmentManager.findFragmentById(R.id.dash_container);
         if(f != null && f instanceof AdFragment){
             AdFragment adFragment = (AdFragment) f;
-            adFragment.fetch(AdManager.getInstance().getEmail(),bID);
+            Log.d("setAdFrag","setAdFrag called");
+            adFragment.setAd();
+        }
+    }
+
+    public class FetchTask extends AsyncTask<String,Void,Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            String bID = params[1];
+            String email = params[0];
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+            String jsonString = null;
+            try {
+                final String AD_BASE_URL = "https://api.beaconoid.me";
+                Uri builtUri = Uri.parse(AD_BASE_URL).buildUpon()
+                        .appendPath("api")
+                        .appendPath("v1")
+                        .appendPath("advertisements")
+                        .appendQueryParameter("email", email)
+                        .appendQueryParameter("beacon_id", bID)
+                        .build();
+                URL url = new URL(builtUri.toString());
+                //Log.d(TAG,url.toString());
+
+                // Create the request to OpenWeatherMap, and open the connection
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.connect();
+
+                // Read the input stream into a String
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    // Nothing to do.
+                    return null;
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                    // But it does make debugging a *lot* easier if you print out the completed
+                    // buffer for debugging.
+                    buffer.append(line + "\n");
+                }
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    return null;
+                }
+                jsonString = buffer.toString();
+
+            } catch (MalformedURLException e) {
+                Log.e(TAG,"MalformedURLException");
+
+            } catch (IOException e) {
+                Log.e(TAG,"IOException");
+
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e(TAG,"IOException");
+
+                    }
+                }
+            }
+
+            if(adslist.size() !=0) {
+                adslist.clear();
+            }
+            adslist.addAll(JsonConverter.convert(jsonString));
+            AdManager.getInstance().setAds(adslist);
+
+            Log.d("json", adslist.size()+"");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void ads) {
+            setAdFrag();
         }
     }
 

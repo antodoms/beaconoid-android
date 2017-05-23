@@ -11,14 +11,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SqlHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "ads.db";
     public static final String TABLE_ADS = "ads";
-    public static final String COLUMN_ID = "_id";
+    private static final String COLUMN_ID = "_id";
     public static final String COLUMN_AD_ID = "ad_id";
     public static final String COLUMN_AD_NAME = "name";
     public static final String COLUMN_BID = "bid";
     public static final String COLUMN_CID = "cid";
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_DES = "description";
-    private static final int version =1;
+    public static final String COLUMN_URL = "url";
+    public static final String COLUMN_EXP = "expire";
+    private static final int version =2;
 
     private static final String DATABASE_CREATE = "create table "
             + TABLE_ADS + "( "
@@ -28,7 +30,9 @@ public class SqlHelper extends SQLiteOpenHelper {
             + COLUMN_BID + " REAL NOT NULL, "
             + COLUMN_CID + " REAL NOT NULL, "
             + COLUMN_PRICE + " REAL NOT NULL, "
-            + COLUMN_DES + " TEXT NOT NULL"
+            + COLUMN_DES + " TEXT NOT NULL, "
+            + COLUMN_URL + " TEXT NOT NULL, "
+            + COLUMN_EXP + " REAL NOT NULL"
             +");";
 
     public SqlHelper(Context context ) {

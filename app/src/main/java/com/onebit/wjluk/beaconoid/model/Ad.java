@@ -6,18 +6,38 @@ package com.onebit.wjluk.beaconoid.model;
 
 public class Ad {
     private int id,bId,cId;
-    private String name,description;
+    private String name,description,url;
     private double price;
+    long expire;
     public Ad() {
 
     }
-    public Ad(int id,String name,int bId,int cId,double price, String description){
+    public Ad(int id,String name,int bId,int cId,double price, String description,
+              String url, long expire){
         this.id = id;
         this.name = name;
         this.bId = bId;
         this.cId = cId;
         this.price = price;
         this.description = description;
+        this.url = url;
+        this.expire = expire;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public long getExpire() {
+        return expire;
+    }
+
+    public void setExpire(long expire) {
+        this.expire = expire;
     }
 
     public int getId() {

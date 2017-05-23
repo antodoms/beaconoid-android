@@ -59,6 +59,8 @@ public class DetailActivity extends AppCompatActivity {
                 values.put(SqlHelper.COLUMN_CID,ad.getcId());
                 values.put(SqlHelper.COLUMN_PRICE,ad.getPrice());
                 values.put(SqlHelper.COLUMN_DES,ad.getDescription());
+                values.put(SqlHelper.COLUMN_URL, ad.getUrl());
+                values.put(SqlHelper.COLUMN_EXP,ad.getExpire());
                 Cursor c = db.query(SqlHelper.TABLE_ADS,
                         null,
                         SqlHelper.COLUMN_AD_ID+"= ?",
@@ -75,6 +77,8 @@ public class DetailActivity extends AppCompatActivity {
                     Snackbar.make(view, R.string.action_already_saved, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+                db.close();
+
             }
         });
     }
