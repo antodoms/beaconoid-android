@@ -1,5 +1,7 @@
 package com.onebit.wjluk.beaconoid.model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by jason on 4/05/17.
  */
@@ -8,12 +10,14 @@ public class Ad {
     private int id,bId,cId;
     private String name,description,url;
     private double price;
-    long expire;
+    private long expire;
+    private String update;
+    Bitmap bitmap;
     public Ad() {
 
     }
     public Ad(int id,String name,int bId,int cId,double price, String description,
-              String url, long expire){
+              String url, String update,long expire){
         this.id = id;
         this.name = name;
         this.bId = bId;
@@ -21,6 +25,7 @@ public class Ad {
         this.price = price;
         this.description = description;
         this.url = url;
+        this.update = update;
         this.expire = expire;
     }
 
@@ -86,5 +91,17 @@ public class Ad {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public String getUpdate() {
+        return update;
     }
 }

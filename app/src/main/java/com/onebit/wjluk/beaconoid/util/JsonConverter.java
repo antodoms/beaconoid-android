@@ -32,8 +32,9 @@ public class JsonConverter {
                     double price = Double.parseDouble(ad.getString("category_id"));
                     String des = ad.getString("category_id");
                     String url = ad.getString("image");
+                    String update = ad.getString("updated_at");
                     Ad adv = new Ad(id,name,bID,cID,price,des,
-                            url,System.currentTimeMillis()+7200000);
+                            url,update,System.currentTimeMillis()+7200000);
                     ads.add(adv);
                 }
                 int i=0;

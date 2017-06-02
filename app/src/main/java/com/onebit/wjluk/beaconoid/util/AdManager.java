@@ -12,9 +12,11 @@ public class AdManager {
     private ArrayList<Ad> ads;
     private static AdManager mInstance = null;
     private String email;
+    private String bId;
     private double distance =-1;
+    private String phone;
 
-    public static AdManager getInstance(){
+    public static synchronized AdManager getInstance(){
         if(mInstance == null)
         {
             mInstance = new AdManager();
@@ -24,6 +26,8 @@ public class AdManager {
     private AdManager(){
         ads = new ArrayList<>();
         email = "";
+        bId = "";
+        phone = "";
     }
 
     public void setAds(ArrayList<Ad> adl) {
@@ -49,5 +53,21 @@ public class AdManager {
 
     public double getDistance() {
         return distance;
+    }
+
+    public void setbId(String id) {
+        bId = id;
+    }
+
+    public String getbId(){
+        return bId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

@@ -2,6 +2,7 @@ package com.onebit.wjluk.beaconoid;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -115,6 +116,10 @@ public class MainActivity extends AppCompatActivity
             and also save the email to the AdManager
             @TODO add imei, waiting for serverside implementation.
             */
+            String phone = Build.MANUFACTURER
+                    + " " + Build.MODEL + " " + Build.VERSION.RELEASE
+                    + " " + Build.VERSION_CODES.class.getFields()[android.os.Build.VERSION.SDK_INT].getName();
+            AdManager.getInstance().setPhone(phone);
             GoogleSignInAccount acct = result.getSignInAccount();
             String email = acct.getEmail();
             AdManager.getInstance().setEmail(email);

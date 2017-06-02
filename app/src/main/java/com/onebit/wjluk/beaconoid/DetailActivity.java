@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,8 @@ import com.onebit.wjluk.beaconoid.model.Ad;
 import com.onebit.wjluk.beaconoid.service.ClickService;
 import com.onebit.wjluk.beaconoid.util.AdManager;
 import com.onebit.wjluk.beaconoid.util.SqlHelper;
+
+import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -35,16 +38,25 @@ public class DetailActivity extends AppCompatActivity {
         mContext = this;
 
         int pos = getIntent().getIntExtra("pos",-1);
-        ad = AdManager.getInstance().getAds().get(pos);
-        Intent intent = new Intent(this, ClickService.class);
-        intent.putExtra("pos",pos);
-        startService(intent);
+        ArrayList<Ad> adsList = AdManager.getInstance().getAds();
+        if(adsList != null & adsList.size() != 0){
+            ad = AdManager.getInstance().getAds().get(pos);
+            Intent intent = new Intent(this, ClickService.class);
+            intent.putExtra("pos",pos);
+            startService(intent);
 
-        TextView tmp = (TextView) findViewById(R.id.tv_tmp);
-        tmp.setText(ad.getName()+" "+ad.getDescription()+" "+ad.getPrice());
+            TextView tmp = (TextView) findViewById(R.id.tv_tmp);
+            tmp.setText(ad.getName()+" "+ad.getDescription()+" "+ad.getPrice());
 
-        detail = (ImageView) findViewById(R.id.img_detail);
-        detail.setImageResource(R.drawable.placeholder);
+            detail = (ImageView) findViewById(R.id.img_detail);
+            Bitmap map = ad.getBitmap();
+            if(map != null) {
+                detail.setImageBitmap(map);
+            } else {
+                detail.setImageResource(R.drawable.placeholder);
+            }
+        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -61,16 +73,17 @@ public class DetailActivity extends AppCompatActivity {
                 values.put(SqlHelper.COLUMN_DES,ad.getDescription());
                 values.put(SqlHelper.COLUMN_URL, ad.getUrl());
                 values.put(SqlHelper.COLUMN_EXP,ad.getExpire());
+                values.put(SqlHelper.COLUMN_LIKED,1);
                 Cursor c = db.query(SqlHelper.TABLE_ADS,
                         null,
-                        SqlHelper.COLUMN_AD_ID+"= ?",
-                        new String[]{ad.getId()+""},
+                        SqlHelper.COLUMN_LIKED+"= ?",
+                        new String[]{"1"},
                         null,
                         null,
                         null
                         );
                 if(c == null || !c.moveToFirst()) {
-                    db.insert(SqlHelper.TABLE_ADS,null,values);
+                    db.update(SqlHelper.TABLE_ADS,values,SqlHelper.COLUMN_AD_ID+"="+ad.getId(),null);
                     Snackbar.make(view, R.string.action_save, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
