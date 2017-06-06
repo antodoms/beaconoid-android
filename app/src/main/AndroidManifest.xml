@@ -27,7 +27,7 @@
 
         <activity
             android:name=".DetailActivity"
-            android:label="@string/title_activity_detail"
+            android:label="@string/detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -37,7 +37,7 @@
 
         <activity
             android:name=".Dash2Activity"
-            android:label="@string/title_activity_dash2"
+            android:label="@string/dash"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

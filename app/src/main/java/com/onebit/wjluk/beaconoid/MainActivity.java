@@ -114,7 +114,6 @@ public class MainActivity extends AppCompatActivity
             /* Signed in successfully.
             signed in, go to dash2activity
             and also save the email to the AdManager
-            @TODO add imei, waiting for serverside implementation.
             */
             String phone = Build.MANUFACTURER
                     + " " + Build.MODEL + " " + Build.VERSION.RELEASE

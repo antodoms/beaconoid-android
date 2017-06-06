@@ -77,6 +77,8 @@ public class SqlHelper extends SQLiteOpenHelper {
         if(c == null || !c.moveToFirst()) {
             db.insert(table,null,values);
         } else {
+            db.update(SqlHelper.TABLE_ADS,values,SqlHelper.COLUMN_AD_ID+"= ?",
+                    new String[]{values.getAsString(SqlHelper.COLUMN_AD_ID)});
         }
     }
 }

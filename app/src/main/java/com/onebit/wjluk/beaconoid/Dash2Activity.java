@@ -97,18 +97,6 @@ public class Dash2Activity extends AppCompatActivity
         manager = AdManager.getInstance();
         adslist = new ArrayList<>();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FetchTask task = new FetchTask();
-                bID = "UR_0020";
-                manager.setbId(bID);
-                task.execute(AdManager.getInstance().getEmail(),bID);
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -176,9 +164,7 @@ public class Dash2Activity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if(id == R.id.action_sign_out){
+       if(id == R.id.action_sign_out){
             signout();
             return true;
         }
@@ -292,13 +278,13 @@ public class Dash2Activity extends AppCompatActivity
                 if(nSpace == null || ins == null){
                     nSpace = namespaceId;
                     ins = instanceId;
-                    bID = nSpace.toString()+ins.toString();
+                    bID = nSpace.toString().substring(2)+ins.toString().substring(2);
                     manager.setDistance(beacon.getDistance());
                     fetch();
                 } else if (nSpace.compareTo(namespaceId) != 0 || ins.compareTo(instanceId)!=0){
                     nSpace = namespaceId;
                     ins = instanceId;
-                    bID = nSpace.toString()+ins.toString();
+                    bID = nSpace.toString().substring(2)+ins.toString().substring(2);
                     fetch();
                 }
 

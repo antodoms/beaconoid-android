@@ -21,4 +21,6 @@
     <string name="action_save">Saved successfully</string>
     <string name="action_already_saved">Already saved</string>
     <string name="welcome">welcome</string>
+    <string name="dash">Dashboard</string>
+    <string name="detail">detail</string>
 </resources>

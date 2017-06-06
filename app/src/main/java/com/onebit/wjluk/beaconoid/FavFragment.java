@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,9 @@ import java.util.ArrayList;
  */
 public class FavFragment extends Fragment {
 
+    private ArrayList<Ad> adslist;
+    private FavAdapter favAdapter;
+
 
     public FavFragment() {
         // Required empty public constructor
@@ -36,10 +40,20 @@ public class FavFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d("lifecycle","favfrag onCreateView");
-        ArrayList<Ad> adslist = new ArrayList<>();
+        adslist = new ArrayList<>();
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_fav, container, false);
         RecyclerView favList = (RecyclerView) v.findViewById(R.id.frag_fav_list);
+        GridLayoutManager favLayoutManager = new GridLayoutManager(getActivity(), 1);
+        favAdapter = new FavAdapter(getActivity(), adslist);
+        favList.setLayoutManager(favLayoutManager);
+        favList.setAdapter(favAdapter);
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         SqlHelper helper = new SqlHelper(getContext());
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.query(SqlHelper.TABLE_ADS,
@@ -49,7 +63,9 @@ public class FavFragment extends Fragment {
                 null,
                 null,
                 null);
+        adslist.clear();
         while(cursor.moveToNext()) {
+
             long exp = cursor.getLong(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_EXP));
             int liked = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_LIKED));
             if(System.currentTimeMillis() <= exp && liked == 1){
@@ -63,6 +79,7 @@ public class FavFragment extends Fragment {
                 String update = cursor.getString(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_UPDATE));
                 Ad ad = new Ad(id,name,bid,cid,price,des,url,update,exp);
                 adslist.add(ad);
+
             } else {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(SqlHelper.COLUMN_AD_ID));
                 ContentValues values = new ContentValues();
@@ -70,11 +87,6 @@ public class FavFragment extends Fragment {
                 db.update(SqlHelper.TABLE_ADS,values,SqlHelper.COLUMN_AD_ID+"="+id,null);
             }
         }
-        GridLayoutManager favLayoutManager = new GridLayoutManager(getActivity(), 1);
-        FavAdapter favAdapter = new FavAdapter(getActivity(), adslist);
-        favList.setLayoutManager(favLayoutManager);
-        favList.setAdapter(favAdapter);
-        return v;
+        favAdapter.notifyDataSetChanged();
     }
-
 }

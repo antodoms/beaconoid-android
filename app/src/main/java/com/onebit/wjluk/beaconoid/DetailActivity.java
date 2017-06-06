@@ -76,8 +76,8 @@ public class DetailActivity extends AppCompatActivity {
                 values.put(SqlHelper.COLUMN_LIKED,1);
                 Cursor c = db.query(SqlHelper.TABLE_ADS,
                         null,
-                        SqlHelper.COLUMN_LIKED+"= ?",
-                        new String[]{"1"},
+                        SqlHelper.COLUMN_LIKED+"= ?" + "and "+SqlHelper.COLUMN_AD_ID + "=?",
+                        new String[]{"1",ad.getId()+""},
                         null,
                         null,
                         null
