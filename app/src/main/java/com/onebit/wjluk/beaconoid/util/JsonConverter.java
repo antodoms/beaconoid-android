@@ -29,8 +29,8 @@ public class JsonConverter {
                     String name = ad.getString("name");
                     int bID = ad.getInt("beacon_id");
                     int cID = ad.getInt("category_id");
-                    double price = Double.parseDouble(ad.getString("category_id"));
-                    String des = ad.getString("category_id");
+                    double price = Double.parseDouble(ad.getString("price"));
+                    String des = ad.getString("description");
                     String url = ad.getString("image");
                     String update = ad.getString("updated_at");
                     Ad adv = new Ad(id,name,bID,cID,price,des,

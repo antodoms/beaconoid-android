@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ImageView imageView =(ImageView) findViewById(R.id.imageViewUser) ;
-        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_person));
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.logo));
 
         //add sign in with google
         //code from google

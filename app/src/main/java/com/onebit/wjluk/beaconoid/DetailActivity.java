@@ -3,9 +3,11 @@ package com.onebit.wjluk.beaconoid;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +23,7 @@ import com.onebit.wjluk.beaconoid.util.AdManager;
 import com.onebit.wjluk.beaconoid.util.SqlHelper;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -44,9 +47,18 @@ public class DetailActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ClickService.class);
             intent.putExtra("pos",pos);
             startService(intent);
+            Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/OpenSans-ExtraBoldItalic.ttf");
+            TextView name = (TextView) findViewById(R.id.tv_name);
+            TextView des = (TextView) findViewById(R.id.tv_des);
+            TextView price = (TextView) findViewById(R.id.tv_price);
+            name.setTypeface(custom_font);
+            name.setText(ad.getName());
+            des.setTypeface(custom_font);
+            des.setText(ad.getDescription());
+            price.setTypeface(custom_font);
+            price.setText("$"+ad.getPrice()+"");
+            price.setBackgroundColor(getResources().getColor(R.color.blue));
 
-            TextView tmp = (TextView) findViewById(R.id.tv_tmp);
-            tmp.setText(ad.getName()+" "+ad.getDescription()+" "+ad.getPrice());
 
             detail = (ImageView) findViewById(R.id.img_detail);
             Bitmap map = ad.getBitmap();
